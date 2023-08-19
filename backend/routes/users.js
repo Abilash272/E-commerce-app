@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken');
 
 // Import the User model
 const User = require('../models/User');
+const authMiddleware = require('../middlewares/authMiddleware');
 
 // POST Register a new user
 router.post('/register', async (req, res) => {
@@ -48,7 +49,7 @@ router.post('/login', async (req, res) => {
     }
 
     // Generate a JWT token
-    const token = jwt.sign({ userId: user._id }, 'your-secret-key', {
+    const token = jwt.sign({ userId: user._id }, 'd3w0-E_c0ww3rce-meB', {
       expiresIn: '1h', // Token expires in 1 hour
     });
 
@@ -59,9 +60,7 @@ router.post('/login', async (req, res) => {
 });
 
 // Protected route: Edit user details
-router.put('/edit/:id', async (req, res) => {
-  // Implement authentication middleware here to verify the token
-  // and ensure the user making the request is authorized
+router.put('/edit/:id', authMiddleware, async (req, res) => {
 
   try {
     const userId = req.params.id;
@@ -79,9 +78,7 @@ router.put('/edit/:id', async (req, res) => {
 });
 
 // Protected route: Delete user
-router.delete('/delete/:id', async (req, res) => {
-  // Implement authentication middleware here to verify the token
-  // and ensure the user making the request is authorized
+router.delete('/delete/:id', authMiddleware, async (req, res) => {
 
   try {
     const userId = req.params.id;
