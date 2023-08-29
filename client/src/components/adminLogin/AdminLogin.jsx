@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, { useState } from 'react';
 import './AdminLogin.css'; // Create this CSS file for styling
 
-function AdminLogin({ onLogin }) {
+function AdminLogin({getToken}) {
   const url = "http://localhost:5006/admin/login";
 
   const [email, setEmail] = useState('');
@@ -11,10 +11,12 @@ function AdminLogin({ onLogin }) {
   const handleLogin = async (event) => {
     event.preventDefault();
     await axios.post(url, {email, password}).then(
-      response => {onLogin(response.data);}
+      response => {
+        localStorage.setItem('token', response.data.token);
+        getToken(response.data.token)
+      }
     ).catch(
       error => {
-        onLogin(false);
         console.log(error.message);
       }
     )

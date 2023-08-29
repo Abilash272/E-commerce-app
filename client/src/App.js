@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AdminHome from "./components/adminHome/AdminHome";
 import AdminLogin from "./components/adminLogin/AdminLogin";
 import RegisterForm from "./components/registerForm/RegisterForm";
@@ -7,18 +7,28 @@ function App() {
 
   const [token, setToken] = useState('');
 
-  const handleLogin = (newToken) => {
-    setToken(newToken);
-  };
+  useEffect(() => {
+    const storedToken = localStorage.getItem('token');
+    if(storedToken){
+      setToken(storedToken);
+    }
+  }, [])
 
+  const handleToken = (newToken) => {
+    setToken(newToken);
+  }
+
+  useEffect(() => {
+    console.log("hello");
+  }, [token])
+  
   return (
     <div className="App">
       {/* <RegisterForm/> */}
-      {!token ? (
-        <AdminLogin onLogin={handleLogin} />
-      ) : (
-        <AdminHome />
-      )}
+      {!token? 
+        <AdminLogin getToken= {handleToken} /> : <AdminHome />
+      } 
+
     </div>
   );
 }
